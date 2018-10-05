@@ -4,6 +4,8 @@
 
 ## Install
 
+For the time being, assumes you've got Go v1.10 or above installed and then:
+
 ```shell
 $ go get -u github.com/mhausenblas/krs
 ```
