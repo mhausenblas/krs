@@ -19,7 +19,9 @@ func main() {
 	for {
 		events := fromFirehose("krs")
 		metrics := toOpenMetrics(events)
-		store(os.Stdout, metrics)
+		if metrics != "" {
+			store(os.Stdout, metrics)
+		}
 		time.Sleep(ScrapeDelayInSec * time.Second)
 	}
 

@@ -33,6 +33,9 @@ func toOpenMetrics(rawevents string) string {
 	if err != nil {
 		log(err)
 	}
+	if len(events.Items) == 0 {
+		return ""
+	}
 	nsstats := namespaceStats{
 		Resources: map[string]*resourceMetric{
 			"Pod":        &resourceMetric{Number: 0},
@@ -43,7 +46,7 @@ func toOpenMetrics(rawevents string) string {
 	// gather stats:
 	for _, event := range events.Items {
 		if event.InvolvedObjectRef.Kind == "Pod" {
-			nsstats.Resources["Pod"].Number = 1
+			nsstats.Resources["Pod"].Number++
 			nsstats.Resources["Pod"].Name = event.InvolvedObjectRef.Name
 			nsstats.Resources["Pod"].Namespace = event.InvolvedObjectRef.Namespace
 		}
