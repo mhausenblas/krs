@@ -14,6 +14,8 @@ Binaries and container image to follow soon.
 
 ## Use
 
+To store in file and see errors on the screen:
+
 ```shell
 $ krs >> /tmp/krs/2018-10-05.json
 ```
