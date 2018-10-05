@@ -7,6 +7,23 @@ import (
 	"time"
 )
 
+// namespaceStats holds the stats for
+// a specific namespace across the tracked
+// resources, each key represents a resource
+// kind, such as Pod, Deployment, etc.
+type namespaceStats struct {
+	Resources map[string]*resourceMetric
+}
+
+// resourceMetric holds the number of
+// resources in a namespaces of a kind
+// over the observation period.
+type resourceMetric struct {
+	Number    int
+	Name      string
+	Namespace string
+}
+
 // toOpenMetrics takes the result of a `kubectl get events` as a
 // JSON formatted string as an input and turns it into a
 // sequence of OpenMetrics lines.
@@ -16,11 +33,27 @@ func toOpenMetrics(rawevents string) string {
 	if err != nil {
 		log(err)
 	}
-	var oml string
+	nsstats := namespaceStats{
+		Resources: map[string]*resourceMetric{
+			"Pod":        &resourceMetric{Number: 0},
+			"Deployment": &resourceMetric{Number: 0},
+			"Service":    &resourceMetric{Number: 0},
+		},
+	}
+	// gather stats:
 	for _, event := range events.Items {
 		if event.InvolvedObjectRef.Kind == "Pod" {
-			labels := map[string]string{"name": event.InvolvedObjectRef.Name, "namespace": event.InvolvedObjectRef.Namespace}
-			oml += ometricsline("pod_count_all", "gauge", "Number of pods in any state (running, terminating, etc.)", "1", labels)
+			nsstats.Resources["Pod"].Number = 1
+			nsstats.Resources["Pod"].Name = event.InvolvedObjectRef.Name
+			nsstats.Resources["Pod"].Namespace = event.InvolvedObjectRef.Namespace
+		}
+	}
+	// serialize in OpenMetrics format
+	var oml string
+	for reskind, val := range nsstats.Resources {
+		if reskind == "Pod" {
+			labels := map[string]string{"name": val.Name, "namespace": val.Namespace}
+			oml += ometricsline("pod_count_all", "gauge", "Number of pods in any state (running, terminating, etc.)", fmt.Sprintf("%v", val.Number), labels)
 		}
 	}
 	return oml
@@ -33,6 +66,7 @@ func toOpenMetrics(rawevents string) string {
 func ometricsline(metric, mtype, mdesc, value string, labels map[string]string) (line string) {
 	line = fmt.Sprintf("# HELP %v %v\n", metric, mdesc)
 	line += fmt.Sprintf("# TYPE %v %v\n", metric, mtype)
+	// add labels:
 	line += fmt.Sprintf("%v{", metric)
 	for k, v := range labels {
 		line += fmt.Sprintf("%v=\"%v\"", k, v)
@@ -40,7 +74,7 @@ func ometricsline(metric, mtype, mdesc, value string, labels map[string]string) 
 	}
 	// make sure that we get rid of trialing comma:
 	line = strings.TrimSuffix(line, ",")
-
+	// now add value and timestamp:
 	line += fmt.Sprintf("} %v %v\n", value, time.Now().UnixNano())
 	return
 }

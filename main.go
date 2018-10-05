@@ -10,7 +10,8 @@ import (
 )
 
 const (
-	// ScrapeDelayInSec defines how long to wait between sampling events:
+	// ScrapeDelayInSec defines how long to wait between
+	// sampling events, called the observation period:
 	ScrapeDelayInSec = 5
 )
 
