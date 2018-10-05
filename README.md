@@ -4,6 +4,18 @@
 
 ## Install
 
+```shell
+$ go get -u github.com/mhausenblas/krs
+```
+
+Binaries and container image to follow soon.
+
 ## Use
 
+```shell
+$ krs >> /tmp/krs/2018-10-05.json
+```
+
 ## Config
+
+`krs` assumes `kubectl` is installed and configured. It writes the OpenMetrics data to `stdout` which you can redirect to a file or process further.
