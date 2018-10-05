@@ -12,3 +12,4 @@
 *.out
 /test-events.json
 .DS_Store
+/out
