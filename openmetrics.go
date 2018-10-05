@@ -56,7 +56,7 @@ func toOpenMetrics(rawevents string) string {
 			switch event.Reason {
 			case "Created":
 				nsstats.Resources["Pod"].Number++
-			case "Deleted":
+			case "Killing":
 				nsstats.Resources["Pod"].Number--
 			}
 			nsstats.Resources[Pod].Name = event.InvolvedObjectRef.Name
