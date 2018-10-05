@@ -7,6 +7,12 @@ import (
 	"time"
 )
 
+const (
+	Pod        = "Pod"
+	Deployment = "Deployment"
+	Service    = "Service"
+)
+
 // namespaceStats holds the stats for
 // a specific namespace across the tracked
 // resources, each key represents a resource
@@ -38,33 +44,52 @@ func toOpenMetrics(rawevents string) string {
 	}
 	nsstats := namespaceStats{
 		Resources: map[string]*resourceMetric{
-			"Pod":        &resourceMetric{Number: 0},
-			"Deployment": &resourceMetric{Number: 0},
-			"Service":    &resourceMetric{Number: 0},
+			Pod:        &resourceMetric{Number: 0},
+			Deployment: &resourceMetric{Number: 0},
+			Service:    &resourceMetric{Number: 0},
 		},
 	}
 	// gather stats:
 	for _, event := range events.Items {
 		switch event.InvolvedObjectRef.Kind {
-		case "Pod":
+		case Pod:
 			switch event.Reason {
 			case "Created":
 				nsstats.Resources["Pod"].Number++
 			case "Deleted":
 				nsstats.Resources["Pod"].Number--
 			}
-			nsstats.Resources["Pod"].Name = event.InvolvedObjectRef.Name
-			nsstats.Resources["Pod"].Namespace = event.InvolvedObjectRef.Namespace
-		case "Deployment", "Service":
-			fmt.Printf("NOT A POD: %v\n", event)
+			nsstats.Resources[Pod].Name = event.InvolvedObjectRef.Name
+			nsstats.Resources[Pod].Namespace = event.InvolvedObjectRef.Namespace
+		case Deployment:
+			fmt.Printf("DEPLOY: %v\n", event.Reason)
+		case Service:
+			fmt.Printf("SVC: %v\n", event.Reason)
 		}
 	}
 	// serialize in OpenMetrics format
 	var oml string
 	for reskind, val := range nsstats.Resources {
-		if reskind == "Pod" {
-			labels := map[string]string{"name": val.Name, "namespace": val.Namespace}
-			oml += ometricsline("pod_count_all", "gauge", "Number of pods in any state (running, terminating, etc.)", fmt.Sprintf("%v", val.Number), labels)
+		labels := map[string]string{"namespace": val.Namespace}
+		switch reskind {
+		case Pod:
+			oml += ometricsline("pods",
+				"gauge",
+				"Number of pods in any state, for example running",
+				fmt.Sprintf("%v", val.Number),
+				labels)
+		case Deployment:
+			oml += ometricsline("deployments",
+				"gauge",
+				"Number of deployments",
+				fmt.Sprintf("%v", val.Number),
+				labels)
+		case Service:
+			oml += ometricsline("services",
+				"gauge",
+				"Number of services",
+				fmt.Sprintf("%v", val.Number),
+				labels)
 		}
 	}
 	return oml
