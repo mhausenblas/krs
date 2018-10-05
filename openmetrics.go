@@ -45,10 +45,18 @@ func toOpenMetrics(rawevents string) string {
 	}
 	// gather stats:
 	for _, event := range events.Items {
-		if event.InvolvedObjectRef.Kind == "Pod" {
-			nsstats.Resources["Pod"].Number++
+		switch event.InvolvedObjectRef.Kind {
+		case "Pod":
+			switch event.Reason {
+			case "Created":
+				nsstats.Resources["Pod"].Number++
+			case "Deleted":
+				nsstats.Resources["Pod"].Number--
+			}
 			nsstats.Resources["Pod"].Name = event.InvolvedObjectRef.Name
 			nsstats.Resources["Pod"].Namespace = event.InvolvedObjectRef.Namespace
+		case "Deployment", "Service":
+			fmt.Printf("NOT A POD: %v\n", event)
 		}
 	}
 	// serialize in OpenMetrics format

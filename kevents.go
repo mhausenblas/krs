@@ -16,6 +16,7 @@ type K8sEvent struct {
 	LastTS            string         `json:"lastTimestamp"`
 	Message           string         `json:"message"`
 	InvolvedObjectRef InvolvedObject `json:"involvedObject"`
+	Reason            string         `json:"reason"`
 }
 
 // InvolvedObject is the target of the event,
