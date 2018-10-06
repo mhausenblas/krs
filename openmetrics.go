@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
-	"time"
 )
 
 const (
@@ -110,7 +109,7 @@ func ometricsline(metric, mtype, mdesc, value string, labels map[string]string) 
 	}
 	// make sure that we get rid of trialing comma:
 	line = strings.TrimSuffix(line, ",")
-	// now add value and timestamp:
-	line += fmt.Sprintf("} %v %v\n", value, time.Now().UnixNano())
+	// now add value and we're done:
+	line += fmt.Sprintf("} %v\n", value)
 	return
 }
