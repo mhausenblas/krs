@@ -6,6 +6,17 @@
 
 `krs` is a command line tool for capturing and serializing Kubernetes resource statistics in [OpenMetrics](https://github.com/OpenObservability/OpenMetrics) format. It dumps statistics about Kubernetes resources, for example the number of pods in a certain namespace, on a periodic basis to local storage. The kind of resources (pods, services, etc.) as well as the scope, that is, cluster-level or a list of namespaces, is configurable. You can use `krs` either on the client-side (for example, from your laptop) or in-cluster, like in a deployment. Note that `krs` leaves the decision where and how long-term storage is carried out up to you.
 
+---
+
+Index:
+
+- [Install](#install)
+    - [From binaries](#from-binaries)
+    - [From source](#from-source)
+    - [From Kubernetes](#from-kubernetes)
+- [Use](#use)
+
+
 ## Install
 
 In order to use `krs` you must meet the following two prerequisites:
@@ -15,7 +26,7 @@ In order to use `krs` you must meet the following two prerequisites:
 
 Here's my test environment: Minikube@v1.10, OpenShift Online@v1.9, AKS@v1.0 with a `kubectl`@v1.11 on macOS.
 
-## From binaries
+### From binaries
 
 Binaries for the following platforms are available:
 
