@@ -25,7 +25,9 @@ func main() {
 	// if we have an argument, we interpret it as the namespace:
 	if len(os.Args) > 1 {
 		if os.Args[1] == "version" {
-			fmt.Printf("This is the Kubernetes Resource Stats (krs) tool in version %v", releaseVersion)
+			fmt.Printf("This is the Kubernetes Resource Stats (krs) tool in version %v\n", releaseVersion)
+			fmt.Println("Usage: [KRS_KUBECTL_BIN=...] krs [namespace]")
+			os.Exit(0)
 		}
 		ns = os.Args[1]
 	}
