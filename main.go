@@ -16,9 +16,9 @@ const (
 )
 
 func main() {
-	var ns string
+	ns := "default"
 	// if we have an argument, we interpret it as the namespace:
-	if len(os.Args) > 0 {
+	if len(os.Args) > 1 {
 		ns = os.Args[1]
 	}
 	for {
@@ -40,9 +40,6 @@ func main() {
 // captures uses kubectl to query for resources
 // and returns them as a JSON format list string.
 func captures(namespace string) string {
-	if namespace == "" {
-		namespace = "default"
-	}
 	res, err := kubecuddler.Kubectl(false, false, "", "get", "--namespace="+namespace, "all", "--output=json")
 	if err != nil {
 		log(err)
