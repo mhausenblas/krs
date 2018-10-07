@@ -1,5 +1,5 @@
  # krs—Kubernetes resource stats
- 
+
 <div style="text-align: center; margin-bottom: 50px;">
   <img src="om-k8s.png" width="200px" />
 </div>
@@ -8,13 +8,42 @@
 
 ## Install
 
-For the time being, assumes you've got Go v1.10 or above installed and then:
+In order to use `krs` you must meet the following two prerequisites:
+
+1. `kubectl` must be [installed](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
+1. Access to a Kubernetes cluster must be configured. 
+
+Here's my test environment: Minikube@v1.10, OpenShift Online@v1.9, AKS@v1.0 with a `kubectl`@v1.11 on macOS.
+
+## From binaries
+
+Binaries for the following platforms are available:
+
+- [Linux](https://github.com/mhausenblas/krs/releases/download/0.1/krs_linux) 
+- [macOS](https://github.com/mhausenblas/krs/releases/download/0.1/krs_macos) 
+- [Windows](https://github.com/mhausenblas/krs/releases/download/0.1/krs_windows)
+
+To download a binary, for example, on a Linux system, do:
+
+```shell
+$ curl -s -L https://github.com/mhausenblas/kubed-sh/releases/download/0.5.1/kubed-sh-linux -o kubed-sh
+```
+
+### From source
+
+Assuming you've got Go in version 1.10 or above installed you can install `krs` from source like so:
 
 ```shell
 $ go get -u github.com/mhausenblas/krs
 ```
 
-Binaries and container image to follow soon.
+### From Kubernetes
+
+You can launch `krs` like so:
+
+```shell
+$ kubectl run krs --image=quay.io/mhausenblas/krs:0.1
+```
 
 ## Use
 
