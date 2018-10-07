@@ -15,15 +15,26 @@ const (
 	ScrapeDelayInSec = 5
 )
 
+var (
+	releaseVersion string
+	kubectlbin     string
+)
+
 func main() {
 	ns := "default"
 	// if we have an argument, we interpret it as the namespace:
 	if len(os.Args) > 1 {
+		if os.Args[1] == "version" {
+			fmt.Printf("This is the Kubernetes Resource Stats (krs) tool in version %v", releaseVersion)
+		}
 		ns = os.Args[1]
+	}
+	if kb := os.Getenv("KRS_KUBECTL_BIN"); kb != "" {
+		kubectlbin = kb
 	}
 	for {
 		// use kubectl to capture resources:
-		res := captures(ns)
+		res := captures(kubectlbin, ns)
 		// convert the string representation
 		// of the JSON result from kubectl
 		// into OpenMetrics lines:
@@ -39,8 +50,8 @@ func main() {
 
 // captures uses kubectl to query for resources
 // and returns them as a JSON format list string.
-func captures(namespace string) string {
-	res, err := kubecuddler.Kubectl(false, false, "", "get", "--namespace="+namespace, "all", "--output=json")
+func captures(kubectlbin, namespace string) string {
+	res, err := kubecuddler.Kubectl(false, false, kubectlbin, "get", "--namespace="+namespace, "all", "--output=json")
 	if err != nil {
 		log(err)
 	}

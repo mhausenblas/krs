@@ -1,4 +1,5 @@
-# krs—Kubernetes resource stats
+ # krs—Kubernetes resource stats
+ 
 <div style="text-align: center; margin-bottom: 50px;">
   <img src="om-k8s.png" width="200px" />
 </div>
@@ -25,7 +26,7 @@ For example, to gathers stats of the `dev42` namespace and store the OpenMetrics
 $ krs dev42 >> /tmp/krs/2018-10-05.om
 ```
 
-If you don't provide a namespace as the first argument, `krs` will watch the `default` namespace.
+If you don't provide a namespace as the first argument, `krs` will watch the `default` namespace. Note that with the environment variable `KRS_KUBECTL_BIN` you can set the `kubectl` to use, which, especially under Windows is required.
 
 The beginning of the output of the [end-to-end test](e2e.sh) looks as follows, with the complete output as seen in [e2e-output.om](e2e-output.om):
 
