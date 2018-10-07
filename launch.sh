@@ -16,6 +16,10 @@ printf "\n---\n" >> /tmp/krs-perm.yaml
 kubectl create clusterrole resreader \
         --verb=get --verb=list \
         --resource=pods --resource=deployments --resource=services \
+        --resource=replicationcontroller --resource=daemonsets.apps \
+        --resource=deployments.apps --resource=replicasets.apps \
+        --resource=statefulsets.apps --resource=horizontalpodautoscalers.autoscaling \
+        --resource=jobs.batch --cronjobs.batch \
         --dry-run --output=yaml >> /tmp/krs-perm.yaml
 
 printf "\n---\n" >> /tmp/krs-perm.yaml
