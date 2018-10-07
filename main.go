@@ -18,6 +18,7 @@ const (
 var (
 	releaseVersion string
 	kubectlbin     string
+	verbose        bool
 )
 
 func main() {
@@ -34,9 +35,12 @@ func main() {
 	if kb := os.Getenv("KRS_KUBECTL_BIN"); kb != "" {
 		kubectlbin = kb
 	}
+	if v := os.Getenv("KRS_VERBOSE"); v != "" {
+		verbose = true
+	}
 	for {
 		// use kubectl to capture resources:
-		res := captures(kubectlbin, ns)
+		res := captures(ns)
 		// convert the string representation
 		// of the JSON result from kubectl
 		// into OpenMetrics lines:
@@ -52,8 +56,8 @@ func main() {
 
 // captures uses kubectl to query for resources
 // and returns them as a JSON format list string.
-func captures(kubectlbin, namespace string) string {
-	res, err := kubecuddler.Kubectl(false, false, kubectlbin, "get", "--namespace="+namespace, "all", "--output=json")
+func captures(namespace string) string {
+	res, err := kubecuddler.Kubectl(verbose, verbose, kubectlbin, "get", "--namespace="+namespace, "all", "--output=json")
 	if err != nil {
 		log(err)
 	}
