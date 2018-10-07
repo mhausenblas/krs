@@ -34,10 +34,11 @@ Binaries for the following platforms are available:
 - [macOS](https://github.com/mhausenblas/krs/releases/download/0.1/krs_macos) 
 - [Windows](https://github.com/mhausenblas/krs/releases/download/0.1/krs_windows)
 
-To download a binary, for example, on a Linux system, do:
+To install from binary, for example, on a macOS system, do:
 
 ```shell
 $ curl -sL https://github.com/mhausenblas/krs/releases/download/0.1/krs_macos -o krs
+$ chmod +x krs
 ```
 
 ### From source
