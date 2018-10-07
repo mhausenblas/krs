@@ -7,7 +7,7 @@ set -o pipefail
 
 NAMESPACE="${1:-default}"
 
-kubectl -n $NAMESPACE run krs --image=quay.io/mhausenblas/krs:0.1 --serviceaccount=krs
+### Set permissions 
 
 kubectl -n $NAMESPACE create sa krs --dry-run --output=yaml > /tmp/krs-perm.yaml
 
@@ -27,5 +27,12 @@ kubectl -n $NAMESPACE create rolebinding allowpodprobes \
         --dry-run --output=yaml >> /tmp/krs-perm.yaml
 
 kubectl -n $NAMESPACE apply -f /tmp/krs-perm.yaml
+
+### launch tool
+kubectl -n $NAMESPACE run krs \
+        --image=quay.io/mhausenblas/krs:0.1 \
+        --serviceaccount=krs \
+        --env="KRS_VERBOSE=true" \
+        --command -- /app/krs $NAMESPACE
 
 # rm /tmp/krs-perm.yaml
