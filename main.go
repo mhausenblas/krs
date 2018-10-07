@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"strings"
 	"time"
 
 	"github.com/mhausenblas/kubecuddler"
@@ -17,16 +16,15 @@ const (
 )
 
 func main() {
+	ns := "krs"
 	for {
-		res := fromFirehose("krs")
-		metrics := toOpenMetrics(res)
+		res := fromFirehose(ns)
+		metrics := toOpenMetrics(ns, res)
 		if metrics != "" {
 			store(os.Stdout, metrics)
 		}
 		time.Sleep(ScrapeDelayInSec * time.Second)
-		fmt.Println(strings.Repeat("-", 80))
 	}
-
 }
 
 // fromFirehose uses kubectl to query for resources
