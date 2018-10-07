@@ -19,7 +19,7 @@ kubectl create clusterrole resreader \
         --resource=replicationcontroller --resource=daemonsets.apps \
         --resource=deployments.apps --resource=replicasets.apps \
         --resource=statefulsets.apps --resource=horizontalpodautoscalers.autoscaling \
-        --resource=jobs.batch --cronjobs.batch \
+        --resource=jobs.batch --resource=cronjobs.batch \
         --dry-run --output=yaml >> /tmp/krs-perm.yaml
 
 printf "\n---\n" >> /tmp/krs-perm.yaml

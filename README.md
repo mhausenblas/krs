@@ -52,11 +52,12 @@ $ go get -u github.com/mhausenblas/krs
 
 ### From Kubernetes
 
-You can launch `krs` and view the output like so:
+You can launch `krs`, here watching a namespace `dev42` and view the output like so:
 
 ```shell
-$ ./launch.sh
-$ kubectl logs -f $(kubectl get po -l=run=krs --output=jsonpath={.items[*].metadata.name})
+$ ./launch.sh dev42
+$ kubectl -n dev42 logs -f $(kubectl -n dev42 get po -l=run=krs --output=jsonpath={.items[*].metadata.name})
+$
 ```
 
 ## Use
