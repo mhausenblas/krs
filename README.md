@@ -17,7 +17,30 @@ Binaries and container image to follow soon.
 To store in file and see errors on the screen:
 
 ```shell
-$ krs >> /tmp/krs/2018-10-05.json
+$ krs >> /tmp/krs/2018-10-05.om
+```
+
+The beginning of the output of the [end-to-end test](e2e.sh) looks as follows, with the complete output as seen in [e2e-output.om](e2e-output.om):
+
+```
+# HELP pods Number of pods in any state, for example running
+# TYPE pods gauge
+pods{namespace="krs"} 2
+# HELP deployments Number of deployments
+# TYPE deployments gauge
+deployments{namespace="krs"} 2
+# HELP services Number of services
+# TYPE services gauge
+services{namespace="krs"} 1
+# HELP pods Number of pods in any state, for example running
+# TYPE pods gauge
+pods{namespace="krs"} 2
+# HELP deployments Number of deployments
+# TYPE deployments gauge
+deployments{namespace="krs"} 2
+# HELP services Number of services
+# TYPE services gauge
+services{namespace="krs"} 1
 ```
 
 ## Config

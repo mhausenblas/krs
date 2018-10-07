@@ -16,10 +16,20 @@ const (
 )
 
 func main() {
-	ns := "krs"
+	var ns string
+	// if we have an argument, we interpret it as the namespace:
+	if len(os.Args) > 0 {
+		ns = os.Args[1]
+	}
 	for {
-		res := fromFirehose(ns)
+		// use kubectl to capture resources:
+		res := captures(ns)
+		// convert the string representation
+		// of the JSON result from kubectl
+		// into OpenMetrics lines:
 		metrics := toOpenMetrics(ns, res)
+		// if we got something to report,
+		// write it to stdout:
 		if metrics != "" {
 			store(os.Stdout, metrics)
 		}
@@ -27,9 +37,9 @@ func main() {
 	}
 }
 
-// fromFirehose uses kubectl to query for resources
+// captures uses kubectl to query for resources
 // and returns them as a JSON format list string.
-func fromFirehose(namespace string) string {
+func captures(namespace string) string {
 	if namespace == "" {
 		namespace = "default"
 	}
