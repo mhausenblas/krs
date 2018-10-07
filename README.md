@@ -14,11 +14,15 @@ Binaries and container image to follow soon.
 
 ## Use
 
-To store in file and see errors on the screen:
+`krs` assumes that `kubectl` is installed and configured. It writes the OpenMetrics data to `stdout` which you can then redirect to a file or process further. 
+
+For example, to gathers stats of the `dev42` namespace and store the OpenMetrics formatted  stats in a file called `/tmp/krs/2018-10-05.om` as well as see the errors on screen (via `stdout`), do the following:
 
 ```shell
-$ krs >> /tmp/krs/2018-10-05.om
+$ krs dev42 >> /tmp/krs/2018-10-05.om
 ```
+
+If you don't provide a namespace as the first argument, `krs` will watch the `default` namespace.
 
 The beginning of the output of the [end-to-end test](e2e.sh) looks as follows, with the complete output as seen in [e2e-output.om](e2e-output.om):
 
@@ -43,6 +47,3 @@ deployments{namespace="krs"} 2
 services{namespace="krs"} 1
 ```
 
-## Config
-
-`krs` assumes `kubectl` is installed and configured. It writes the OpenMetrics data to `stdout` which you can redirect to a file or process further.
