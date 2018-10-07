@@ -11,4 +11,4 @@ COPY out/krs_linux /app/
 RUN mv /app/krs_linux /app/krs && \
     curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.11.3/bin/linux/amd64/kubectl && \
     chmod +x ./kubectl
-ENTRYPOINT ["/app/krs"]
+ENTRYPOINT ["KRS_KUBECTL_BIN=/app/kubectl", "/app/krs"]

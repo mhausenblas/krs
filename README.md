@@ -52,10 +52,11 @@ $ go get -u github.com/mhausenblas/krs
 
 ### From Kubernetes
 
-You can launch `krs` like so:
+You can launch `krs` and view the output like so:
 
 ```shell
 $ kubectl run krs --image=quay.io/mhausenblas/krs:0.1
+$ kubectl logs -f $(kubectl get po -l=run=krs --output=jsonpath={.items[*].metadata.name})
 ```
 
 ## Use
