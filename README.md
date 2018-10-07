@@ -37,7 +37,7 @@ Binaries for the following platforms are available:
 To download a binary, for example, on a Linux system, do:
 
 ```shell
-$ curl -s -L https://github.com/mhausenblas/kubed-sh/releases/download/0.5.1/kubed-sh-linux -o kubed-sh
+$ curl -sL https://github.com/mhausenblas/krs/releases/download/0.1/krs_macos -o krs
 ```
 
 ### From source
