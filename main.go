@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/mhausenblas/kubecuddler"
@@ -17,12 +18,13 @@ const (
 
 func main() {
 	for {
-		events := fromFirehose("krs")
-		metrics := toOpenMetrics(events)
+		res := fromFirehose("krs")
+		metrics := toOpenMetrics(res)
 		if metrics != "" {
 			store(os.Stdout, metrics)
 		}
 		time.Sleep(ScrapeDelayInSec * time.Second)
+		fmt.Println(strings.Repeat("-", 80))
 	}
 
 }
@@ -33,11 +35,11 @@ func fromFirehose(namespace string) string {
 	if namespace == "" {
 		namespace = "default"
 	}
-	events, err := kubecuddler.Kubectl(false, false, "", "get", "--namespace="+namespace, "get", "all", "--output=json")
+	res, err := kubecuddler.Kubectl(false, false, "", "get", "--namespace="+namespace, "all", "--output=json")
 	if err != nil {
 		log(err)
 	}
-	return events
+	return res
 }
 
 // store takes OpenMetrics lines as input and stores it in the target file
