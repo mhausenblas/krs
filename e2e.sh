@@ -18,9 +18,9 @@ kubectl -n krs run otherserver --image centos:7 -- \
 echo "Creating service"
 kubectl -n krs expose deploy/appserver --port 80
 
-sleep 2
+sleep 10
 
 echo "Deleting two deployments now"
 
-kubectl -n krs delete deploy/appserver
+kubectl -n krs delete deploy/appserver deploy/otherserver
 kubectl -n krs delete svc/appserver 

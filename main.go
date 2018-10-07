@@ -27,13 +27,13 @@ func main() {
 
 }
 
-// fromFirehose uses kubectl to query for events
-// and returns them in JSON format as a list.
-// If the namespace param is non-empty then the
-// specified namespace will be watched, otherwise
-// cluster-wide.
+// fromFirehose uses kubectl to query for resources
+// and returns them as a JSON format list string.
 func fromFirehose(namespace string) string {
-	events, err := kubecuddler.Kubectl(false, false, "", "get", "--namespace="+namespace, "events", "--output=json")
+	if namespace == "" {
+		namespace = "default"
+	}
+	events, err := kubecuddler.Kubectl(false, false, "", "get", "--namespace="+namespace, "get", "all", "--output=json")
 	if err != nil {
 		log(err)
 	}

@@ -32,13 +32,13 @@ type resourceMetric struct {
 // toOpenMetrics takes the result of a `kubectl get events` as a
 // JSON formatted string as an input and turns it into a
 // sequence of OpenMetrics lines.
-func toOpenMetrics(rawevents string) string {
-	events := K8sEvents{}
-	err := json.Unmarshal([]byte(rawevents), &events)
+func toOpenMetrics(rawkres string) string {
+	kres := K8sList{}
+	err := json.Unmarshal([]byte(rawkres), &kres)
 	if err != nil {
 		log(err)
 	}
-	if len(events.Items) == 0 {
+	if len(kres.Items) == 0 {
 		return ""
 	}
 	nsstats := namespaceStats{
@@ -49,48 +49,50 @@ func toOpenMetrics(rawevents string) string {
 		},
 	}
 	// gather stats:
-	for _, event := range events.Items {
-		switch event.InvolvedObjectRef.Kind {
+	for _, kr := range kres.Items {
+		switch kr.Kind {
 		case Pod:
-			switch event.Reason {
-			case "Created":
-				nsstats.Resources["Pod"].Number++
-			case "Killing":
-				nsstats.Resources["Pod"].Number--
-			}
-			nsstats.Resources[Pod].Name = event.InvolvedObjectRef.Name
-			nsstats.Resources[Pod].Namespace = event.InvolvedObjectRef.Namespace
+			// switch event.Reason {
+			// case "Created":
+			// 	nsstats.Resources["Pod"].Number++
+			// case "Killing":
+			// 	nsstats.Resources["Pod"].Number--
+			// }
+			// nsstats.Resources[Pod].Name = event.InvolvedObjectRef.Name
+			// nsstats.Resources[Pod].Namespace = event.InvolvedObjectRef.Namespace
+			fmt.Printf("POD: %v\n", kr)
 		case Deployment:
-			fmt.Printf("DEPLOY: %v\n", event.Reason)
+			fmt.Printf("DEPLOY: %v\n", kr)
 		case Service:
-			fmt.Printf("SVC: %v\n", event.Reason)
+			fmt.Printf("SVC: %v\n", kr)
 		}
 	}
+	_ = nsstats
 	// serialize in OpenMetrics format
 	var oml string
-	for reskind, val := range nsstats.Resources {
-		labels := map[string]string{"namespace": val.Namespace}
-		switch reskind {
-		case Pod:
-			oml += ometricsline("pods",
-				"gauge",
-				"Number of pods in any state, for example running",
-				fmt.Sprintf("%v", val.Number),
-				labels)
-		case Deployment:
-			oml += ometricsline("deployments",
-				"gauge",
-				"Number of deployments",
-				fmt.Sprintf("%v", val.Number),
-				labels)
-		case Service:
-			oml += ometricsline("services",
-				"gauge",
-				"Number of services",
-				fmt.Sprintf("%v", val.Number),
-				labels)
-		}
-	}
+	// for reskind, val := range nsstats.Resources {
+	// 	labels := map[string]string{"namespace": val.Namespace}
+	// 	switch reskind {
+	// 	case Pod:
+	// 		oml += ometricsline("pods",
+	// 			"gauge",
+	// 			"Number of pods in any state, for example running",
+	// 			fmt.Sprintf("%v", val.Number),
+	// 			labels)
+	// 	case Deployment:
+	// 		oml += ometricsline("deployments",
+	// 			"gauge",
+	// 			"Number of deployments",
+	// 			fmt.Sprintf("%v", val.Number),
+	// 			labels)
+	// 	case Service:
+	// 		oml += ometricsline("services",
+	// 			"gauge",
+	// 			"Number of services",
+	// 			fmt.Sprintf("%v", val.Number),
+	// 			labels)
+	// 	}
+	// }
 	return oml
 }
 
