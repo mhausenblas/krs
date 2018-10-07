@@ -24,7 +24,8 @@ In order to use `krs` you must meet the following two prerequisites:
 1. `kubectl` must be [installed](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
 1. Access to a Kubernetes cluster must be configured. 
 
-Here's my test environment: Minikube@v1.10, OpenShift Online@v1.9, AKS@v1.0 with a `kubectl`@v1.11 on macOS.
+Here are my test environments: a v1.9 cluster via OpenShift Online, a v1.10 cluster via AKS, and a v1.11 cluster via Minikube, 
+all with client-side with a `kubectl`@v1.11 on macOS.
 
 ### From binaries
 
