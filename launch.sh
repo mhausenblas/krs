@@ -36,7 +36,6 @@ kubectl -n $NAMESPACE apply -f /tmp/krs-perm.yaml
 kubectl -n $NAMESPACE run krs \
         --image=quay.io/mhausenblas/krs:0.1 \
         --serviceaccount=krs \
-        --env="KRS_VERBOSE=true" \
         --command -- /app/krs $NAMESPACE
 
 # rm /tmp/krs-perm.yaml

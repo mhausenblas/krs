@@ -52,12 +52,30 @@ $ go get -u github.com/mhausenblas/krs
 
 ### From Kubernetes
 
-You can launch `krs`, here watching a namespace `dev42` and view the output like so:
+You can launch `krs` in Kubernetes using the `launch.sh` script as follows. The script will dynamically create the respective permissions for the namespace and run `krs` as a deployment.  
+So, in a sense this is a self-test: create and watch a namespace `krs-test` and view the output like so:
 
 ```shell
-$ ./launch.sh dev42
-$ kubectl -n dev42 logs -f $(kubectl -n dev42 get po -l=run=krs --output=jsonpath={.items[*].metadata.name})
-$
+$ kubectl create ns krs-test
+namespace/krs-test created
+
+$ ./launch.sh krs-test
+serviceaccount/krs created
+clusterrole.rbac.authorization.k8s.io/resreader configured
+rolebinding.rbac.authorization.k8s.io/allowpodprobes created
+deployment.apps/krs created
+
+$ kubectl -n krs-test logs -f $(kubectl -n krs-test get po -l=run=krs --output=jsonpath={.items[*].metadata.name})
+# HELP pods Number of pods in any state, for example running
+# TYPE pods gauge
+pods{namespace="krs-test"} 1
+# HELP deployments Number of deployments
+# TYPE deployments gauge
+deployments{namespace="krs-test"} 1
+# HELP services Number of services
+# TYPE services gauge
+services{namespace="krs-test"} 0
+...
 ```
 
 ## Use
