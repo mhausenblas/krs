@@ -24,7 +24,7 @@ kubectl create clusterrole resreader \
 
 printf "\n---\n" >> /tmp/krs-perm.yaml
 
-kubectl -n $NAMESPACE create rolebinding allowpodprobes \
+kubectl -n $NAMESPACE create rolebinding allowresprobes \
         --clusterrole=resreader \
         --serviceaccount=$NAMESPACE:krs \
         --namespace=$NAMESPACE \
