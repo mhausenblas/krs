@@ -44,6 +44,7 @@ To install from binary, for example, on a macOS system, do:
 ```shell
 $ curl -sL https://github.com/mhausenblas/krs/releases/download/0.1/krs_macos -o krs
 $ chmod +x krs
+$ sudo mv krs /usr/local/bin
 ```
 
 ### From source
