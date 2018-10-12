@@ -36,20 +36,42 @@ const (
 	Deployment = "Deployment"
 	// Service is the service resource kind
 	Service = "Service"
+	// RC is the replication controller resource kind
+	RC = "ReplicationController"
+	// ReplicaSet is the replica set resource kind
+	ReplicaSet = "ReplicaSet"
+	// DaemonSet is the daemon set resource kind
+	DaemonSet = "DaemonSet"
+	// StatefulSet is the stateful set resource kind
+	StatefulSet = "StatefulSet"
+	// HPA is the horizontal pod autoscaler resource kind
+	HPA = "HorizontalPodAutoscaler"
+	// Job is the job resource kind
+	Job = "Job"
+	// CronJob is the cron job resource kind
+	CronJob = "CronJob"
 )
 
 var (
-	// maps the supported resource spec like 'pods' or 'services' to
-	// resource kinds such as Pod or Service
+	// supportedres maps the supported resource names like 'pods' or 'svc'
+	// to their resource kinds such as Pod or Service
+	// Note: if a short name exists, we use it. See also `kubectl api-resources`
 	supportedres map[string]string
 )
 
 // initres sets the supported resources
 func initres() {
 	supportedres = map[string]string{
-		"pods":        Pod,
-		"deployments": Deployment,
-		"services":    Service,
+		"pods":   Pod,
+		"deploy": Deployment,
+		"svc":    Service,
+		"rc":     RC,
+		"rs":     ReplicaSet,
+		"ds":     DaemonSet,
+		"sts":    StatefulSet,
+		"hpa":    HPA,
+		"jobs":   Job,
+		"cj":     CronJob,
 	}
 }
 
@@ -80,7 +102,7 @@ func listres() (res string) {
 
 // parseres checks if we're dealing with a valid resource targets string
 // and if so, extracts the potentially comma-separated list of resource(s)
-// we're want to track. For example, this is valid: 'pods,services'.
+// we're want to track. For example, this is valid: 'pods,svc'.
 // Note that unsupported ones will be silently dropped.
 func parseres(targets string) (tresources []string, err error) {
 	if !strings.Contains(targets, ",") {
