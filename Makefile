@@ -1,4 +1,4 @@
-krs_version := 0.1
+krs_version := 0.2
 git_version := `git rev-parse HEAD`
 main_dir := `pwd`
 
