@@ -22,6 +22,17 @@ type resourceMetric struct {
 	Number int
 }
 
+func initStats(namespace string) (ns namespaceStats) {
+	ns = namespaceStats{
+		Namespace: namespace,
+	}
+	ns.Resources = map[string]*resourceMetric{}
+	for _, r := range supportedres {
+		ns.Resources[r] = &resourceMetric{Number: 0}
+	}
+	return
+}
+
 // toOpenMetrics takes the result of a `kubectl get events` as a
 // JSON formatted string as an input and turns it into a
 // sequence of OpenMetrics lines.
@@ -34,23 +45,12 @@ func toOpenMetrics(namespace, rawkres string) string {
 	if len(kres.Items) == 0 {
 		return ""
 	}
-	nsstats := namespaceStats{
-		Resources: map[string]*resourceMetric{
-			Pod:        &resourceMetric{Number: 0},
-			Deployment: &resourceMetric{Number: 0},
-			Service:    &resourceMetric{Number: 0},
-		},
-		Namespace: namespace,
-	}
+	// set up list of supported resources:
+	nsstats := initStats(namespace)
 	// gather stats:
 	for _, kr := range kres.Items {
-		switch kr.Kind {
-		case Pod:
-			nsstats.Resources[Pod].Number++
-		case Deployment:
-			nsstats.Resources[Deployment].Number++
-		case Service:
-			nsstats.Resources[Service].Number++
+		if isvalidkind(kr.Kind) {
+			nsstats.Resources[kr.Kind].Number++
 		}
 	}
 	// serialize in OpenMetrics format

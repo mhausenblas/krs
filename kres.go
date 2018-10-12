@@ -30,12 +30,17 @@ type K8SMeta struct {
 }
 
 const (
-	Pod        = "Pod"
+	// Pod is the pod resource kind
+	Pod = "Pod"
+	// Deployment is the deployment resource kind
 	Deployment = "Deployment"
-	Service    = "Service"
+	// Service is the service resource kind
+	Service = "Service"
 )
 
 var (
+	// maps the supported resource spec like 'pods' or 'services' to
+	// resource kinds such as Pod or Service
 	supportedres map[string]string
 )
 
@@ -48,10 +53,20 @@ func initres() {
 	}
 }
 
-// isvalidres checks if a given resource is supported
-func isvalidres(resource string) bool {
+// isvalidspec checks if a given resource spec is supported
+func isvalidspec(resource string) bool {
 	_, ok := supportedres[resource]
 	return ok
+}
+
+// isvalidkind checks if a given resource kind is supported
+func isvalidkind(resource string) bool {
+	for _, r := range supportedres {
+		if r == resource {
+			return true
+		}
+	}
+	return false
 }
 
 // listres outputs supported resources
@@ -69,14 +84,14 @@ func listres() (res string) {
 // Note that unsupported ones will be silently dropped.
 func parseres(targets string) (tresources []string, err error) {
 	if !strings.Contains(targets, ",") {
-		if isvalidres(targets) {
+		if isvalidspec(targets) {
 			return []string{supportedres[targets]}, nil
 		}
 		return []string{}, fmt.Errorf("%v is not supported, valid ones are: %v", targets, listres())
 	}
 	rawtres := strings.Split(targets, ",")
 	for _, tres := range rawtres {
-		if isvalidres(tres) {
+		if isvalidspec(tres) {
 			tresources = append(tresources, supportedres[targets])
 		}
 	}

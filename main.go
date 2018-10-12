@@ -38,6 +38,9 @@ func main() {
 	if v := os.Getenv("KRS_VERBOSE"); v != "" {
 		verbose = true
 	}
+	// populate the lookup table for supported resources
+	initres()
+	// start main processing loop:
 	for {
 		// use kubectl to capture resources:
 		res := captures(ns)
