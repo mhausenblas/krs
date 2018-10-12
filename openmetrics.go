@@ -6,12 +6,6 @@ import (
 	"strings"
 )
 
-const (
-	Pod        = "Pod"
-	Deployment = "Deployment"
-	Service    = "Service"
-)
-
 // namespaceStats holds the stats for
 // a specific namespace across the tracked
 // resources, each key represents a resource
