@@ -36,7 +36,7 @@ func initStats(namespace string) (ns namespaceStats) {
 // toOpenMetrics takes the result of a `kubectl get events` as a
 // JSON formatted string as an input and turns it into a
 // sequence of OpenMetrics lines.
-func toOpenMetrics(namespace, rawkres string) string {
+func toOpenMetrics(namespace, rawkres string, tresources []string) string {
 	kres := K8sList{}
 	err := json.Unmarshal([]byte(rawkres), &kres)
 	if err != nil {
@@ -47,6 +47,9 @@ func toOpenMetrics(namespace, rawkres string) string {
 	}
 	// set up list of supported resources:
 	nsstats := initStats(namespace)
+	if verbose {
+		info(fmt.Sprintf("%v", nsstats))
+	}
 	// gather stats:
 	for _, kr := range kres.Items {
 		if isvalidkind(kr.Kind) {
@@ -54,31 +57,31 @@ func toOpenMetrics(namespace, rawkres string) string {
 		}
 	}
 	// serialize in OpenMetrics format
-	var oml string
-	for reskind, val := range nsstats.Resources {
+	var oml, rspec string
+	for rkind, val := range nsstats.Resources {
 		labels := map[string]string{"namespace": nsstats.Namespace}
-		switch reskind {
-		case Pod:
-			oml += ometricsline("pods",
+		if istarget(rkind, tresources) {
+			rspec = lookupspec(rkind)
+			oml += ometricsline(rspec,
 				"gauge",
-				"Number of pods in any state, for example running",
+				fmt.Sprintf("Number of %v", rspec),
 				fmt.Sprintf("%v", val.Number),
 				labels)
-		case Deployment:
-			oml += ometricsline("deployments",
-				"gauge",
-				"Number of deployments",
-				fmt.Sprintf("%v", val.Number),
-				labels)
-		case Service:
-			oml += ometricsline("services",
-				"gauge",
-				"Number of services",
-				fmt.Sprintf("%v", val.Number),
-				labels)
+			if verbose {
+				info(fmt.Sprintf("Add kind %v with spec %v to OM output", rkind, rspec))
+			}
 		}
 	}
 	return oml
+}
+
+func istarget(candidate string, targets []string) bool {
+	for _, t := range targets {
+		if candidate == t {
+			return true
+		}
+	}
+	return false
 }
 
 // ometricsline creates an OpenMetrics compliant line, for example:

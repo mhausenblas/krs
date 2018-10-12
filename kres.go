@@ -83,12 +83,22 @@ func isvalidspec(resource string) bool {
 
 // isvalidkind checks if a given resource kind is supported
 func isvalidkind(resource string) bool {
-	for _, r := range supportedres {
-		if r == resource {
+	for _, kind := range supportedres {
+		if kind == resource {
 			return true
 		}
 	}
 	return false
+}
+
+// lookupspec returns the spec for a given resource
+func lookupspec(resource string) string {
+	for spec, kind := range supportedres {
+		if kind == resource {
+			return spec
+		}
+	}
+	return ""
 }
 
 // listres outputs supported resources

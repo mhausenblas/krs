@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io"
 	"os"
@@ -22,16 +23,20 @@ var (
 )
 
 func main() {
+	// targetresources defines what resources to capture:
+	targetresources := flag.String("resources", "po,svc,deploy", "defines the kind of resources to capture")
 	ns := "default"
 	// if we have an argument, we interpret it as the namespace:
 	if len(os.Args) > 1 {
 		if os.Args[1] == "version" {
 			fmt.Printf("This is the Kubernetes Resource Stats (krs) tool in version %v\n", releaseVersion)
-			fmt.Println("Usage: [KRS_KUBECTL_BIN=...] krs [namespace]")
+			fmt.Println("Usage: [KRS_KUBECTL_BIN=...] krs [namespace] [--resources=...]")
 			os.Exit(0)
 		}
 		ns = os.Args[1]
 	}
+	// get params and env variables:
+	flag.Parse()
 	if kb := os.Getenv("KRS_KUBECTL_BIN"); kb != "" {
 		kubectlbin = kb
 	}
@@ -40,14 +45,18 @@ func main() {
 	}
 	// populate the lookup table for supported resources
 	initres()
+	tres, err := parseres(*targetresources)
+	if err != nil {
+		return
+	}
 	// start main processing loop:
 	for {
 		// use kubectl to capture resources:
-		res := captures(ns)
+		allres := captures(ns)
 		// convert the string representation
 		// of the JSON result from kubectl
 		// into OpenMetrics lines:
-		metrics := toOpenMetrics(ns, res)
+		metrics := toOpenMetrics(ns, allres, tres)
 		// if we got something to report,
 		// write it to stdout:
 		if metrics != "" {
@@ -75,4 +84,8 @@ func store(target io.Writer, metrics string) {
 
 func log(err error) {
 	_, _ = fmt.Fprintf(os.Stderr, "\x1b[91m%v\x1b[0m\n", err)
+}
+
+func info(msg string) {
+	_, _ = fmt.Fprintf(os.Stderr, "\x1b[92m%v\x1b[0m\n", msg)
 }
