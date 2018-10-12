@@ -24,7 +24,7 @@ var (
 
 func main() {
 	// targetresources defines what resources to capture:
-	targetresources := flag.String("resources", "po,svc,deploy", "defines the kind of resources to capture")
+	targetresources := flag.String("resources", "pods,svc,deploy", "defines the kind of resources to capture")
 	ns := "default"
 	// if we have an argument, we interpret it as the namespace:
 	if len(os.Args) > 1 {
@@ -47,7 +47,11 @@ func main() {
 	initres()
 	tres, err := parseres(*targetresources)
 	if err != nil {
-		return
+		log(err)
+		os.Exit(1)
+	}
+	if verbose {
+		info(fmt.Sprintf("Parsed targets: %v", tres))
 	}
 	// start main processing loop:
 	for {

@@ -48,7 +48,7 @@ func toOpenMetrics(namespace, rawkres string, tresources []string) string {
 	// set up list of supported resources:
 	nsstats := initStats(namespace)
 	if verbose {
-		info(fmt.Sprintf("%v", nsstats))
+		info(fmt.Sprintf("Supported: %+v Targets: %v", nsstats, tresources))
 	}
 	// gather stats:
 	for _, kr := range kres.Items {

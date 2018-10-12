@@ -115,6 +115,9 @@ func listres() (res string) {
 // we're want to track. For example, this is valid: 'pods,svc'.
 // Note that unsupported ones will be silently dropped.
 func parseres(targets string) (tresources []string, err error) {
+	if verbose {
+		info(fmt.Sprintf("Raw targets: %v", targets))
+	}
 	if !strings.Contains(targets, ",") {
 		if isvalidspec(targets) {
 			return []string{supportedres[targets]}, nil
@@ -124,7 +127,7 @@ func parseres(targets string) (tresources []string, err error) {
 	rawtres := strings.Split(targets, ",")
 	for _, tres := range rawtres {
 		if isvalidspec(tres) {
-			tresources = append(tresources, supportedres[targets])
+			tresources = append(tresources, supportedres[tres])
 		}
 	}
 	if len(tresources) == 0 {
