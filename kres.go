@@ -127,6 +127,9 @@ func parseres(targets string) (tresources []string, err error) {
 	rawtres := strings.Split(targets, ",")
 	for _, tres := range rawtres {
 		if isvalidspec(tres) {
+			if verbose {
+				info(fmt.Sprintf("%v is a valid target", tres))
+			}
 			tresources = append(tresources, supportedres[tres])
 		}
 	}
