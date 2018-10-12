@@ -23,9 +23,10 @@ var (
 )
 
 func main() {
+	// ns defines where resources should be captured:
+	ns := flag.String("namespace", "default", "defines the namespace to capture")
 	// targetresources defines what resources to capture:
 	targetresources := flag.String("resources", "pods,svc,deploy", "defines the kind of resources to capture")
-	ns := "default"
 	// if we have an argument, we interpret it as the namespace:
 	if len(os.Args) > 1 {
 		if os.Args[1] == "version" {
@@ -33,7 +34,6 @@ func main() {
 			fmt.Println("Usage: [KRS_KUBECTL_BIN=...] krs [namespace] [--resources=...]")
 			os.Exit(0)
 		}
-		ns = os.Args[1]
 	}
 	// get params and env variables:
 	flag.Parse()
@@ -56,11 +56,11 @@ func main() {
 	// start main processing loop:
 	for {
 		// use kubectl to capture resources:
-		allres := captures(ns)
+		allres := captures(*ns)
 		// convert the string representation
 		// of the JSON result from kubectl
 		// into OpenMetrics lines:
-		metrics := toOpenMetrics(ns, allres, tres)
+		metrics := toOpenMetrics(*ns, allres, tres)
 		// if we got something to report,
 		// write it to stdout:
 		if metrics != "" {
