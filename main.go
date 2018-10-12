@@ -26,7 +26,7 @@ func main() {
 	// ns defines where resources should be captured:
 	ns := flag.String("namespace", "default", "defines the namespace to capture")
 	// targetresources defines what resources to capture:
-	targetresources := flag.String("resources", "pods,svc,deploy", "defines the kind of resources to capture")
+	targetresources := flag.String("resources", "pods,svc,deploy", "defines the kind of resources (e.g. pods or svc) to capture")
 	// if we have an argument, we interpret it as the namespace:
 	if len(os.Args) > 1 {
 		if os.Args[1] == "version" {
