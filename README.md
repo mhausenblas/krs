@@ -122,3 +122,10 @@ There are two environment variables that `krs` understands:
 
 - With `KRS_KUBECTL_BIN` you can define which `kubectl` to use.
 - With `KRS_VERBOSE` set (for example, to `true` but really any value does) you can get debug-level information, down to what `kubectl` call has been issued.
+
+To do:
+
+- [] Extend the e2e testing to all supported resource kinds
+- [] Improve usage docs (more examples) and inline docs
+- [] Improve [Make file](https://suva.sh/posts/well-documented-makefiles/)
+- [] Cut 0.2 release (binaries and container image) 
