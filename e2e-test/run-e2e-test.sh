@@ -5,8 +5,6 @@ set -o errtrace
 set -o nounset
 set -o pipefail
 
-# for i in {1..10} ; do kubectl -n krs get events -o json > out/${i}_e2e-events.json ; sleep 1; done
-
 echo "Launching two deployments"
 
 kubectl -n krs run appserver --image centos:7 -- \
