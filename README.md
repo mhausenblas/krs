@@ -3,14 +3,13 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/mhausenblas/krs)](https://goreportcard.com/report/github.com/mhausenblas/krs)
 [![container repository on Quay](https://quay.io/repository/mhausenblas/krs/status "Docker Repository on Quay")](https://quay.io/repository/mhausenblas/krs)
 
+<div style="color: #e03030; font-size: smaller; font-weight: bolder; margin-bottom: 20px; ">
+NOTE: this is heavy work in progress and we may introduce breaking, non-backwards compatible changes in any version before 1.0 and also, use it at your own risk, ideally only in dev and test environments.
+</div>
 
 <div style="text-align: center; margin-bottom: 50px;">
   <img src="om-k8s.png" width="200px" />
 </div>
-
-<p style="color: #e03030;">
-NOTE: this is heavy work in progress and we may introduce breaking, non-backwards compatible changes in any version before 1.0 and also, use it at your own risk, ideally only in dev and test environments.
-</p>
 
 `krs` is a command line tool for capturing and serializing Kubernetes resource statistics in [OpenMetrics](https://github.com/OpenObservability/OpenMetrics) format. It dumps statistics about Kubernetes resources, for example the number of pods in a certain namespace, on a periodic basis to local storage. The kind of resources (pods, services, etc.) as well as the scope, that is, cluster-level or a list of namespaces, is configurable. You can use `krs` either on the client-side (for example, from your laptop) or in-cluster, like in a deployment. Note that `krs` leaves the decision where and how long-term storage is carried out up to you.
 
