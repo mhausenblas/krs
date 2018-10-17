@@ -1,5 +1,3 @@
- # krs—Kubernetes resource stats
- 
 [![Go Report Card](https://goreportcard.com/badge/github.com/mhausenblas/krs)](https://goreportcard.com/report/github.com/mhausenblas/krs)
 [![container repository on Quay](https://quay.io/repository/mhausenblas/krs/status "Docker Repository on Quay")](https://quay.io/repository/mhausenblas/krs)
 
