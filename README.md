@@ -34,13 +34,7 @@ Here are my test environments: a v1.9 cluster via OpenShift Online, a v1.10 clus
 
 ### From binaries
 
-Binaries for the following platforms are available:
-
-- [Linux](https://github.com/mhausenblas/krs/releases/download/latest/krs_linux) 
-- [macOS](https://github.com/mhausenblas/krs/releases/download/latest/krs_macos) 
-- [Windows](https://github.com/mhausenblas/krs/releases/download/latest/krs_windows)
-
-To install from binary, for example, on a macOS system, do:
+You can download binaries for Linux, macOS, and Windows which are available [via the release page](https://github.com/mhausenblas/krs/releases/latest). To install from binary, for example, on a macOS system, do:
 
 ```shell
 $ curl -sL https://github.com/mhausenblas/krs/releases/download/latest/krs_macos -o krs
