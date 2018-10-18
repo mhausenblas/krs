@@ -12,12 +12,14 @@ kubectl get ns | grep $NAMESPACE > /dev/null || (echo Aborting e2e test since I 
 
 ################################################################################
 # base tests (pod,rs,deploy,svc)
-baset $NAMESPACE
+# baset $NAMESPACE
 
 ###############################################################################
 # ds
 echo "Creating a daemon set"
 kubectl -n $NAMESPACE apply -f ds.yaml
+sleep 2
+delete -n $NAMESPACE ds krs-test-ds
 
 # sts
 
