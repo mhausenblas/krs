@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: krs-test-sts
+spec:
+  selector:
+    matchLabels:
+      tool: krs
+  serviceName: krs-test-sts-svc
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        tool: krs
+    spec:
+      containers:
+      - name: shard
+        image: quay.io/mhausenblas/mehdb:0.6
+        ports:
+        - containerPort: 9876
+        env:
+        - name: MEHDB_DATADIR
+          value: "/mehdbdata"
+        livenessProbe:
+          initialDelaySeconds: 2
+          periodSeconds: 10
+          httpGet:
+            path: /status
+            port: 9876
+        readinessProbe:
+          initialDelaySeconds: 15
+          periodSeconds: 30
+          httpGet:
+            path: /status?level=full
+            port: 9876
+        volumeMounts:
+        - name: data
+          mountPath: /mehdbdata
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "standard"
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: krs-test-sts-svc
+  labels:
+    tool: krs
+spec:
+  ports:
+  - port: 9876
+  clusterIP: None
+  selector:
+    tool: krs

@@ -5,32 +5,41 @@ set -o errtrace
 set -o nounset
 set -o pipefail
 
+### INIT #######################################################################
+
+### commands line arguments
 NAMESPACE="${1:-krs}"
 
-# make sure the namespace exists before we proceed:
+### make sure the namespace exists before we proceed
 kubectl get ns | grep $NAMESPACE > /dev/null || (echo Aborting e2e test since I can not find namespace $NAMESPACE && exit 1)
 
 ################################################################################
-# base tests (pod,rs,deploy,svc)
+### base tests (pod,rs,deploy,svc)
 # baset $NAMESPACE
 
 ###############################################################################
-# ds
-echo "Creating a daemon set"
-kubectl -n $NAMESPACE apply -f ds.yaml
-sleep 2
-delete -n $NAMESPACE ds krs-test-ds
+### daemon set
+# echo "Creating a daemon set"
+# kubectl -n $NAMESPACE apply -f ds.yaml
+# sleep 2
+# kubectl delete -n $NAMESPACE ds krs-test-ds
 
-# sts
+### sts
+echo "Creating a stateful set"
+kubectl -n $NAMESPACE apply -f sts.yaml
+sleep 10
+kubectl delete -n $NAMESPACE svc krs-test-sts-svc
+kubectl delete -n $NAMESPACE sts krs-test-sts
+kubectl delete -n $NAMESPACE pvc data-krs-test-sts-0
 
-# jobs
+### jobs
 
-# cj
+### cj
 
-# hpa
+### hpa
 
 
-#### FUNCTIONS #################################################################
+### FUNCTIONS ##################################################################
 
 function baset {
     # deploy,rc,pods
