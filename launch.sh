@@ -34,7 +34,7 @@ kubectl -n $NAMESPACE apply -f /tmp/krs-perm.yaml
 
 ### launch tool
 kubectl -n $NAMESPACE run krs \
-        --image=quay.io/mhausenblas/krs:0.1 \
+        --image=quay.io/mhausenblas/krs:0.2 \
         --serviceaccount=krs \
         --command -- /app/krs $NAMESPACE
 
