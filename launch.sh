@@ -6,7 +6,7 @@ set -o nounset
 set -o pipefail
 
 NAMESPACE="${1:-default}"
-RESOURCES="${2:-"pods,deploy,sv"}"
+RESOURCES="${2:-pods,deploy,svc}"
 
 ### Set permissions 
 
@@ -41,6 +41,6 @@ kubectl -n $NAMESPACE apply -f /tmp/krs-perm.yaml
 kubectl -n $NAMESPACE run krs \
         --image=quay.io/mhausenblas/krs:0.2 \
         --serviceaccount=krs \
-        --command -- /app/krs --namespace $NAMESPACE --resources $RESOURCES
+        --command -- /app/krs --namespace $NAMESPACE --resources "$RESOURCES"
 
 # rm /tmp/krs-perm.yaml
