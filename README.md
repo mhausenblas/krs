@@ -127,8 +127,5 @@ There are two environment variables that `krs` understands:
 
 To do:
 
-- [x] Add support for PVs and PVCs
-- [x] Improve usage docs (more examples) and inline docs
-- [ ] Cut 0.2 release (binaries and container image) 
 - [ ] Improve [Make file](https://suva.sh/posts/well-documented-makefiles/)
 - [ ] Complete e2e testing
