@@ -30,21 +30,20 @@ In order to use `krs` you must meet the following two prerequisites:
 1. `kubectl` must be [installed](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
 1. Access to a Kubernetes cluster must be configured. 
 
-Here are my test environments: a v1.9 cluster via OpenShift Online, a v1.10 cluster via AKS, and a v1.11 cluster via Minikube, 
-all with client-side with a `kubectl`@v1.11 on macOS.
+Here are my test environments: a v1.9 cluster via OpenShift Online, a v1.10 cluster via AKS, and a v1.11 cluster via Minikube, all with a `kubectl`@v1.11 client-side, on macOS.
 
 ### From binaries
 
 Binaries for the following platforms are available:
 
-- [Linux](https://github.com/mhausenblas/krs/releases/download/0.1/krs_linux) 
-- [macOS](https://github.com/mhausenblas/krs/releases/download/0.1/krs_macos) 
-- [Windows](https://github.com/mhausenblas/krs/releases/download/0.1/krs_windows)
+- [Linux](https://github.com/mhausenblas/krs/releases/download/latest/krs_linux) 
+- [macOS](https://github.com/mhausenblas/krs/releases/download/latest/krs_macos) 
+- [Windows](https://github.com/mhausenblas/krs/releases/download/latest/krs_windows)
 
 To install from binary, for example, on a macOS system, do:
 
 ```shell
-$ curl -sL https://github.com/mhausenblas/krs/releases/download/0.1/krs_macos -o krs
+$ curl -sL https://github.com/mhausenblas/krs/releases/download/latest/krs_macos -o krs
 $ chmod +x krs
 $ sudo mv krs /usr/local/bin
 ```
@@ -92,10 +91,10 @@ services{namespace="krs-test"} 0
 For example, to gathers stats of the `dev42` namespace and store the OpenMetrics formatted  stats in a file called `/tmp/krs/2018-10-05.om` as well as see the errors on screen (via `stdout`), do the following:
 
 ```shell
-$ krs dev42 >> /tmp/krs/2018-10-05.om
+$ krs --namespace dev42 >> /tmp/krs/2018-10-05.om
 ```
 
-If you don't provide a namespace as the first argument, `krs` will watch the `default` namespace. Note that with the environment variable `KRS_KUBECTL_BIN` you can set the `kubectl` to use, which, especially under Windows is required.
+If you don't provide a namespace as the first argument, `krs` will watch the `default` namespace. Also, by default, the following resources are tracked: pods, deployments, and services.
 
 For example, an excerpt of the [output](e2e-test/e2e-output.om) of the [end-to-end test](e2e-test/) looks as follows:
 
@@ -121,9 +120,15 @@ services{namespace="krs"} 1
 ...
 ```
 
+If you, for example, want to track pods, stateful sets, and persistent volumes in the namespace `prod1337` you'd launch `krs` like so:
+
+```shell
+$ krs --namespace prod1337 --resources "pods,sts,pv,pvc"
+```
+
 There are two environment variables that `krs` understands:
 
-- With `KRS_KUBECTL_BIN` you can define which `kubectl` to use.
+- With `KRS_KUBECTL_BIN` you can define which `kubectl` binary `krs` will use. Note: under Windows this is required, for OpenShift, this is an option to use `oc` instead of `kubectl`.
 - With `KRS_VERBOSE` set (for example, to `true` but really any value does) you can get debug-level information, down to what `kubectl` call has been issued.
 
 To do:
