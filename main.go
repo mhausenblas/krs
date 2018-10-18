@@ -26,7 +26,7 @@ func main() {
 	// ns defines where resources should be captured:
 	ns := flag.String("namespace", "default", "defines the namespace to capture")
 	// targetresources defines what resources to capture:
-	targetresources := flag.String("resources", "pods,svc,deploy", "defines the kind of resources (e.g. pods or svc) to capture")
+	targetresources := flag.String("resources", "pods,deploy,svc", "defines the kind of resources (e.g. pods or svc) to capture")
 	// if we have an argument, we interpret it as the namespace:
 	if len(os.Args) > 1 {
 		if os.Args[1] == "version" {
@@ -56,7 +56,7 @@ func main() {
 	// start main processing loop:
 	for {
 		// use kubectl to capture resources:
-		allres := captures(*ns)
+		allres := captures(*ns, *targetresources)
 		// convert the string representation
 		// of the JSON result from kubectl
 		// into OpenMetrics lines:
@@ -72,8 +72,8 @@ func main() {
 
 // captures uses kubectl to query for resources
 // and returns them as a JSON format list string.
-func captures(namespace string) string {
-	res, err := kubecuddler.Kubectl(verbose, verbose, kubectlbin, "get", "--namespace="+namespace, "all", "--output=json")
+func captures(namespace, targets string) string {
+	res, err := kubecuddler.Kubectl(verbose, verbose, kubectlbin, "get", "--namespace="+namespace, targets, "--output=json")
 	if err != nil {
 		log(err)
 	}
