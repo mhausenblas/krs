@@ -6,8 +6,11 @@ set -o nounset
 set -o pipefail
 
 NAMESPACE="${1:-default}"
+RESOURCES="${2:-"pods,deploy,sv"}"
 
 ### Set permissions 
+
+kubectl -n $NAMESPACE delete clusterrole resreader
 
 kubectl -n $NAMESPACE create sa krs --dry-run --output=yaml > /tmp/krs-perm.yaml
 
@@ -18,8 +21,10 @@ kubectl create clusterrole resreader \
         --resource=pods --resource=deployments --resource=services \
         --resource=replicationcontroller --resource=daemonsets.apps \
         --resource=deployments.apps --resource=replicasets.apps \
-        --resource=statefulsets.apps --resource=horizontalpodautoscalers.autoscaling \
+        --resource=statefulsets.apps \
+        --resource=horizontalpodautoscalers.autoscaling \
         --resource=jobs.batch --resource=cronjobs.batch \
+        --resource=persistentvolumes --resource=persistentvolumeclaims \
         --dry-run --output=yaml >> /tmp/krs-perm.yaml
 
 printf "\n---\n" >> /tmp/krs-perm.yaml
@@ -36,6 +41,6 @@ kubectl -n $NAMESPACE apply -f /tmp/krs-perm.yaml
 kubectl -n $NAMESPACE run krs \
         --image=quay.io/mhausenblas/krs:0.2 \
         --serviceaccount=krs \
-        --command -- /app/krs $NAMESPACE
+        --command -- /app/krs --namespace $NAMESPACE --resources $RESOURCES
 
 # rm /tmp/krs-perm.yaml
