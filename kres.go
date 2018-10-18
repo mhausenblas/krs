@@ -50,6 +50,10 @@ const (
 	Job = "Job"
 	// CronJob is the cron job resource kind
 	CronJob = "CronJob"
+	// PersistentVolume is the persistent volume resource kind
+	PersistentVolume = "PersistentVolume"
+	// PersistentVolumeClaim is the persistent volume claim resource kind
+	PersistentVolumeClaim = "PersistentVolumeClaim"
 )
 
 var (
@@ -72,6 +76,8 @@ func initres() {
 		"hpa":    HPA,
 		"jobs":   Job,
 		"cj":     CronJob,
+		"pv":     PersistentVolume,
+		"pvc":    PersistentVolumeClaim,
 	}
 }
 
