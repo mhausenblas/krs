@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: krs-test-ds
+  namespace: krs
+spec:
+  template:
+    metadata:
+      name: krs
+      labels:
+        tool: krs
+    spec:
+      containers:
+        - name: shell
+          image: centos:7
+          command:
+            - "sh"
+            - "-c"
+            - "while true; do echo WORK! ; sleep 10 ; done"
