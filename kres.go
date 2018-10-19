@@ -54,8 +54,8 @@ const (
 	PersistentVolume = "PersistentVolume"
 	// PersistentVolumeClaim is the persistent volume claim resource kind
 	PersistentVolumeClaim = "PersistentVolumeClaim"
-        // Ingress is the ingress kind
-        Ingress = "Ingress"
+	// Ingress is the ingress kind
+	Ingress = "Ingress"
 )
 
 var (
@@ -80,7 +80,7 @@ func initres() {
 		"cj":     CronJob,
 		"pv":     PersistentVolume,
 		"pvc":    PersistentVolumeClaim,
-                "ing":    Ingress,
+		"ing":    Ingress,
 	}
 }
 
