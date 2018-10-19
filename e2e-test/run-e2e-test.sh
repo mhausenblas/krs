@@ -70,3 +70,7 @@ kubectl delete -n $NAMESPACE pvc data-krs-test-sts-0
 ### hpa
 
 ### ingress
+echo "Creating an ingress"
+kubectl -n $NAMESPACE apply -f ing.yaml
+sleep 2
+kubectl -n $NAMESPACE delete test-ingress
