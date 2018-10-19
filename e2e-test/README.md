@@ -15,7 +15,7 @@ $ # OS=linux
 $ # OS=windows
 
 $ # Launch krs
-$ ./out/krs_$OS --namespace=krs --resources="pods,rs,deploy,ds,sts,pv,pvc,ing"
+$ ./out/krs_$OS --namespace=krs --resources="pods,rs,deploy,ds,sts,pv,pvc,hpa,ing"
 ```
 
 In a second one, launch the end-to-end test script in the `e2e-test` directory:

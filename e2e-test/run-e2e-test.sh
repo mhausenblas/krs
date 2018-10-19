@@ -10,6 +10,7 @@ set -o pipefail
 
 function baset {
     # deploy,rc,pods
+    echo
     echo "Launching two deployments"
     kubectl -n $1 run appserver --image centos:7 -- \
             sh -c "while true; do echo WORK ; sleep 10 ; done"
@@ -18,6 +19,7 @@ function baset {
             sh -c "while true; do echo WORK ; sleep 10 ; done"
 
     # svc
+    echo
     echo "Creating a service"
     kubectl -n $1 expose deploy/appserver --port 80
 
@@ -46,6 +48,7 @@ baset $NAMESPACE
 
 ###############################################################################
 ### daemon set
+echo
 echo "Creating a daemon set"
 kubectl -n $NAMESPACE apply -f ds.yaml
 sleep 2
@@ -53,6 +56,7 @@ echo "Deleting the daemon set"
 kubectl delete -n $NAMESPACE ds krs-test-ds
 
 ### sts
+echo
 echo "Creating a stateful set and service"
 kubectl -n $NAMESPACE apply -f sts.yaml
 sleep 10
@@ -68,9 +72,17 @@ kubectl delete -n $NAMESPACE pvc data-krs-test-sts-0
 ### cron job
 
 ### hpa
+echo
+echo "Creating a HPA"
+kubectl apply -f hpa.yaml
+sleep 5
+echo "Deleting a HPA"
+kubectl delete hpa test-hpa
 
 ### ingress
+echo
 echo "Creating an ingress"
 kubectl -n $NAMESPACE apply -f ing.yaml
 sleep 2
-kubectl -n $NAMESPACE delete test-ingress
+echo "Deleting an ingress"
+kubectl -n $NAMESPACE delete ing test-ingress
