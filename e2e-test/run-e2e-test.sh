@@ -68,3 +68,5 @@ kubectl delete -n $NAMESPACE pvc data-krs-test-sts-0
 ### cron job
 
 ### hpa
+
+### ingress
