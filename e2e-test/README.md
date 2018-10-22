@@ -15,7 +15,7 @@ $ # OS=linux
 $ # OS=windows
 
 $ # Launch krs
-$ ./out/krs_$OS --namespace=krs --resources="pods,rs,deploy,ds,sts,pv,pvc,hpa,ing"
+$ ./out/krs_$OS --namespace=krs --resources="pods,rs,deploy,ds,sts,pv,pvc,cj,hpa,ing"
 ```
 
 In a second one, launch the end-to-end test script in the `e2e-test` directory:
@@ -28,5 +28,5 @@ $ ./run-e2e-test.sh
 Optionally, to keep an eye on all resources, in a third session:
 
 ```shell
-$ watch kubectl -n krs get pods,rs,deploy,ds,sts,pv,pvc,ing
+$ watch kubectl -n krs get pods,rs,deploy,ds,sts,pv,pvc,cj,hpa,ing
 ```
