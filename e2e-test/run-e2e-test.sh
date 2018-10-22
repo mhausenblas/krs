@@ -70,14 +70,20 @@ kubectl delete -n $NAMESPACE pvc data-krs-test-sts-0
 ### job
 
 ### cron job
+echo
+echo "Creating a CronJob"
+kubectl -n $NAMESPACE apply -f cj.yaml
+sleep 5
+echo "Deleting a CronJob"
+kubectl -n $NAMESPACE delete cj test-cj
 
 ### hpa
 echo
 echo "Creating a HPA"
-kubectl apply -f hpa.yaml
+kubectl -n $NAMESPACE apply -f hpa.yaml
 sleep 5
 echo "Deleting a HPA"
-kubectl delete hpa test-hpa
+kubectl -n $NAMESPACE delete hpa test-hpa
 
 ### ingress
 echo
