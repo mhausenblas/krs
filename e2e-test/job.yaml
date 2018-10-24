@@ -1,0 +1,13 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: test-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: appserver
+        image: centos:7
+        command: ["sh", "-c", "while true; do echo WORK; sleep 10; done"]
+      restartPolicy: Never
+  backoffLimit: 4
