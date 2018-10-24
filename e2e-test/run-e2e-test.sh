@@ -68,6 +68,12 @@ echo "Deleting the persistent volume"
 kubectl delete -n $NAMESPACE pvc data-krs-test-sts-0
 
 ### job
+echo
+echo "Creating a Job"
+kubectl -n $NAMESPACE apply -f job.yaml
+sleep 10
+echo "Deleting a Job"
+kubectl -n $NAMESPACE delete job test-job
 
 ### cron job
 echo
